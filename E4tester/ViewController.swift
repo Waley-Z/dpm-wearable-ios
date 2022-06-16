@@ -8,7 +8,7 @@ import UIKit
 class ViewController: UITableViewController {
     
     
-    static let EMPATICA_API_KEY = "ADD_YOUR_KEY_HERE"
+    static let EMPATICA_API_KEY = "7022b7ea8fea4c608b594a828a5c7ad3"
     
     
     private var devices: [EmpaticaDeviceManager] = []
@@ -70,7 +70,7 @@ class ViewController: UITableViewController {
     
     private func updateValue(device : EmpaticaDeviceManager, string : String = "") {
         
-        if let row = self.devices.index(of: device) {
+        if let row = self.devices.firstIndex(of: device) {
             
             DispatchQueue.main.async {
                 
@@ -141,6 +141,29 @@ class ViewController: UITableViewController {
     }
 }
 
+func startLoad() {
+    let url = URL(string: "http://192.168.31.235:8080")!
+    let task = URLSession.shared.dataTask(with: url) { data, response, error in
+        if let error = error {
+            print ("error: \(error)")
+            return
+        }
+        guard let httpResponse = response as? HTTPURLResponse,
+            (200...299).contains(httpResponse.statusCode) else {
+            print ("error: server error")
+            return
+        }
+        if let mimeType = httpResponse.mimeType, mimeType == "text/html",
+            let data = data,
+            let string = String(data: data, encoding: .utf8) {
+            print("success")
+            DispatchQueue.main.async {
+                print(string)
+            }
+        }
+    }
+    task.resume()
+}
 
 extension ViewController: EmpaticaDelegate {
     
@@ -169,7 +192,48 @@ extension ViewController: EmpaticaDelegate {
     }
     
     func didUpdate(_ status: BLEStatus) {
-        
+      
+        print("start networking")
+        startLoad()
+//        struct Order: Codable {
+//            let customerId: String
+//            let items: [String]
+//        }
+//
+//        let order = Order(customerId: "12345",
+//                          items: ["Cheese pizza", "Diet soda"])
+//        guard let uploadData = try? JSONEncoder().encode(order) else {
+//            return
+//        }
+//
+//        //
+//
+//        let url = URL(string: "http://127.0.0.1:5000")!
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        //
+//
+//        let task = URLSession.shared.uploadTask(with: request, from: uploadData) { data, response, error in
+//            if let error = error {
+//                print ("error: \(error)")
+//                return
+//            }
+//            guard let response = response as? HTTPURLResponse,
+//                (200...299).contains(response.statusCode) else {
+//                print ("server error")
+//                return
+//            }
+//            if let mimeType = response.mimeType,
+//                mimeType == "application/json",
+//                let data = data,
+//                let dataString = String(data: data, encoding: .utf8) {
+//                print ("got data: \(dataString)")
+//            }
+//        }
+//        task.resume()
+
         switch status {
         case kBLEStatusReady:
             print("[didUpdate] status \(status.rawValue) • kBLEStatusReady")
@@ -189,13 +253,23 @@ extension ViewController: EmpaticaDelegate {
 extension ViewController: EmpaticaDeviceDelegate {
     
     func didReceiveTemperature(_ temp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-        
-        print("\(device.serialNumber!) TEMP { \(temp) }")
+        let date = Date(timeIntervalSince1970: timestamp)
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
+        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
+        let strDate = dateFormatter.string(from: date)
+        print("\(device.serialNumber!) \(strDate) TEMP { \(temp) }")
     }
     
     func didReceiveAccelerationX(_ x: Int8, y: Int8, z: Int8, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
         print("\(device.serialNumber!) ACC > {x: \(x), y: \(y), z: \(z)}")
+    }
+    
+    func didReceiveIBI(_ ibi: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
+        
+        print("\(device.serialNumber!) IBI { \(ibi) }")
     }
     
     func didReceiveTag(atTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
@@ -318,7 +392,7 @@ class DeviceTableViewCell : UITableViewCell {
         
         self.device = device
         
-        super.init(style: UITableViewCellStyle.value1, reuseIdentifier: "device")
+        super.init(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "device")
     }
     
     required init?(coder aDecoder: NSCoder) {
