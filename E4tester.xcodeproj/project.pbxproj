@@ -7,13 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		55591B691F2884AC0084CF0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55591B681F2884AC0084CF0C /* AppDelegate.swift */; };
 		55591B6B1F2884AC0084CF0C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55591B6A1F2884AC0084CF0C /* ViewController.swift */; };
 		55591B6E1F2884AC0084CF0C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55591B6C1F2884AC0084CF0C /* Main.storyboard */; };
 		55591B701F2884AC0084CF0C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55591B6F1F2884AC0084CF0C /* Assets.xcassets */; };
 		55591B731F2884AC0084CF0C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55591B711F2884AC0084CF0C /* LaunchScreen.storyboard */; };
 		59CAB61E207770890052910F /* E4link.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CAB61D207770890052910F /* E4link.framework */; };
 		59CAB626207771C30052910F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CAB625207771C30052910F /* CoreBluetooth.framework */; };
+		B91AA790286CA26E00B36E84 /* ModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA78F286CA26E00B36E84 /* ModelData.swift */; };
+		B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA791286CA5B700B36E84 /* DashboardView.swift */; };
+		B91AA796286CA62400B36E84 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA795286CA62400B36E84 /* FriendsView.swift */; };
+		B91AA79C286D12E900B36E84 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA79B286D12E900B36E84 /* Config.swift */; };
+		B93AB80A285D8E6E0008DC59 /* DPMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93AB809285D8E6E0008DC59 /* DPMApp.swift */; };
+		B93AB80C285D8EF10008DC59 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93AB80B285D8EF10008DC59 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +36,6 @@
 
 /* Begin PBXFileReference section */
 		55591B651F2884AC0084CF0C /* E4tester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = E4tester.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		55591B681F2884AC0084CF0C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55591B6A1F2884AC0084CF0C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		55591B6D1F2884AC0084CF0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		55591B6F1F2884AC0084CF0C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -40,6 +44,12 @@
 		59CAB61D207770890052910F /* E4link.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = E4link.framework; path = Libs/E4link.framework; sourceTree = "<group>"; };
 		59CAB6222077716E0052910F /* E4tester-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "E4tester-Bridging-Header.h"; sourceTree = "<group>"; };
 		59CAB625207771C30052910F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		B91AA78F286CA26E00B36E84 /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
+		B91AA791286CA5B700B36E84 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		B91AA795286CA62400B36E84 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		B91AA79B286D12E900B36E84 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		B93AB809285D8E6E0008DC59 /* DPMApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPMApp.swift; sourceTree = "<group>"; };
+		B93AB80B285D8EF10008DC59 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,8 +85,9 @@
 		55591B671F2884AC0084CF0C /* E4tester */ = {
 			isa = PBXGroup;
 			children = (
-				55591B681F2884AC0084CF0C /* AppDelegate.swift */,
-				55591B6A1F2884AC0084CF0C /* ViewController.swift */,
+				B93AB809285D8E6E0008DC59 /* DPMApp.swift */,
+				B91AA797286D0C8400B36E84 /* View */,
+				B91AA798286D0C8C00B36E84 /* Model */,
 				55591B6C1F2884AC0084CF0C /* Main.storyboard */,
 				55591B6F1F2884AC0084CF0C /* Assets.xcassets */,
 				55591B711F2884AC0084CF0C /* LaunchScreen.storyboard */,
@@ -93,6 +104,42 @@
 				59CAB61D207770890052910F /* E4link.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B91AA797286D0C8400B36E84 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B93AB80B285D8EF10008DC59 /* ContentView.swift */,
+				B91AA799286D0D0400B36E84 /* Dashboard */,
+				B91AA79A286D0D1900B36E84 /* Friends */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B91AA798286D0C8C00B36E84 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B91AA78F286CA26E00B36E84 /* ModelData.swift */,
+				B91AA79B286D12E900B36E84 /* Config.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B91AA799286D0D0400B36E84 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				B91AA791286CA5B700B36E84 /* DashboardView.swift */,
+				55591B6A1F2884AC0084CF0C /* ViewController.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		B91AA79A286D0D1900B36E84 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				B91AA795286CA62400B36E84 /* FriendsView.swift */,
+			);
+			path = Friends;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -123,7 +170,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "Felipe Castro";
 				TargetAttributes = {
 					55591B641F2884AC0084CF0C = {
@@ -175,8 +222,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B91AA796286CA62400B36E84 /* FriendsView.swift in Sources */,
 				55591B6B1F2884AC0084CF0C /* ViewController.swift in Sources */,
-				55591B691F2884AC0084CF0C /* AppDelegate.swift in Sources */,
+				B91AA790286CA26E00B36E84 /* ModelData.swift in Sources */,
+				B91AA79C286D12E900B36E84 /* Config.swift in Sources */,
+				B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */,
+				B93AB80A285D8E6E0008DC59 /* DPMApp.swift in Sources */,
+				B93AB80C285D8EF10008DC59 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +279,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -251,7 +304,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -286,6 +339,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -304,7 +358,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -323,6 +377,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 52N826U726;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -332,7 +387,7 @@
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				INFOPLIST_FILE = E4tester/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = Empatica1.E4tester;
@@ -365,7 +420,7 @@
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				INFOPLIST_FILE = E4tester/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = Empatica1.E4tester;

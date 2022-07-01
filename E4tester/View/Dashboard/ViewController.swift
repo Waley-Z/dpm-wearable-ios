@@ -7,38 +7,34 @@ import UIKit
 
 class ViewController: UITableViewController {
     
-    
-    static let EMPATICA_API_KEY = "7022b7ea8fea4c608b594a828a5c7ad3"
-    
+    weak var delegate: ViewControllerDelegate?
     
     private var devices: [EmpaticaDeviceManager] = []
     
+    init(delegate: ViewControllerDelegate) {
+        super.init(style: .plain)
+        self.delegate = delegate
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private var allDisconnected : Bool {
-        
         return self.devices.reduce(true) { (value, device) -> Bool in
-        
             value && device.deviceStatus == kDeviceStatusDisconnected
         }
     }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
         self.tableView.delegate = self
-        
         self.tableView.dataSource = self
-        
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            
-            EmpaticaAPI.authenticate(withAPIKey: ViewController.EMPATICA_API_KEY) { (status, message) in
-                
+            EmpaticaAPI.authenticate(withAPIKey: Config.EMPATICA_API_KEY) { (status, message) in
                 if status {
-                    
                     // "Authenticated"
-                    
                     DispatchQueue.main.async {
-                        
                         self.discover()
                     }
                 }
@@ -47,24 +43,19 @@ class ViewController: UITableViewController {
     }
     
     private func discover() {
-        
         EmpaticaAPI.discoverDevices(with: self)
     }
     
     private func disconnect(device: EmpaticaDeviceManager) {
-        
         if device.deviceStatus == kDeviceStatusConnected {
-            
             device.disconnect()
         }
         else if device.deviceStatus == kDeviceStatusConnecting {
-            
             device.cancelConnection()
         }
     }
     
     private func connect(device: EmpaticaDeviceManager) {
-        
         device.connect(with: self)
     }
     
@@ -83,21 +74,15 @@ class ViewController: UITableViewController {
                             let cell = self.tableView.cellForRow(at: IndexPath(row: row, section: 0))
                             
                             if !device.allowed {
-                                
                                 cell?.detailTextLabel?.text = "NOT ALLOWED"
-                                
                                 cell?.detailTextLabel?.textColor = UIColor.orange
                             }
                             else if string.count > 0 {
-                                
                                 cell?.detailTextLabel?.text = "\(self.deviceStatusDisplay(status: device.deviceStatus)) • \(string)"
-                                
                                 cell?.detailTextLabel?.textColor = UIColor.gray
                             }
                             else {
-                                
                                 cell?.detailTextLabel?.text = "\(self.deviceStatusDisplay(status: device.deviceStatus))"
-                                
                                 cell?.detailTextLabel?.textColor = UIColor.gray
                             }
                         }
@@ -141,28 +126,103 @@ class ViewController: UITableViewController {
     }
 }
 
-func startLoad() {
-    let url = URL(string: "http://192.168.31.235:8080")!
-    let task = URLSession.shared.dataTask(with: url) { data, response, error in
-        if let error = error {
-            print ("error: \(error)")
-            return
-        }
-        guard let httpResponse = response as? HTTPURLResponse,
-            (200...299).contains(httpResponse.statusCode) else {
-            print ("error: server error")
-            return
-        }
-        if let mimeType = httpResponse.mimeType, mimeType == "text/html",
-            let data = data,
-            let string = String(data: data, encoding: .utf8) {
-            print("success")
-            DispatchQueue.main.async {
-                print(string)
+protocol ViewControllerDelegate: AnyObject {
+    func updateHeartRate(_ viewController: ViewController, heartRate: Int)
+    
+    func updateFatigueLevel(_ viewController: ViewController, fatigueLevel: Int)
+}
+
+
+extension ViewController {
+        
+    // GET
+    func startLoad() {
+        let url = URL(string: "http://192.168.31.235:8080")!
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            if let error = error {
+                print ("error: \(error)")
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                print ("error: server error")
+                return
+            }
+            if let mimeType = httpResponse.mimeType, mimeType == "text/html",
+               let data = data,
+               let string = String(data: data, encoding: .utf8) {
+                print("success")
+                DispatchQueue.main.async {
+                    print(string)
+                }
             }
         }
+        task.resume()
     }
-    task.resume()
+
+    // POST
+    func uploadHR(heartRate: Int, timestamp: Double) {
+        struct Request: Codable {
+            let userKey: String
+            let username: String
+            let heart_rate: Int
+            let timestamp: Double
+        }
+        
+        let request_json = Request(userKey: Config.EMPATICA_API_KEY, username: Config.USERNAME,
+                                   heart_rate: heartRate, timestamp: timestamp)
+        guard let encoded_json = try? JSONEncoder().encode(request_json) else {
+            return
+        }
+        
+        let url = URL(string: Config.API_SERVER + "/api/v1/data/heart_rate/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let task = URLSession.shared.uploadTask(with: request, from: encoded_json) { data, response, error in
+            if let error = error {
+                print ("error: \(error)")
+                return
+            }
+            guard let response = response as? HTTPURLResponse,
+                  (200...299).contains(response.statusCode) else {
+                print ("server error")
+                return
+            }
+            if let mimeType = response.mimeType,
+                mimeType == "application/json",
+                let data = data,
+                let dataString = String(data: data, encoding: .utf8) {
+                
+                DispatchQueue.main.async { [self] in
+
+                    print ("got data: \(dataString)")
+                    do {
+                        // make sure this JSON is in the format we expect
+                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            // try to read out a string array
+                            if let fatigue_bool = json["fatigue_bool"] as? Bool {
+                                print(fatigue_bool)
+                                if fatigue_bool {
+                                    if let fatigue_level = json["fatigue_level"] as? Int {
+                                        print(fatigue_level)
+                                        print("fatigue updated")
+                                        delegate?.updateFatigueLevel(self, fatigueLevel: fatigue_level)
+                                    }
+                                }
+                            }
+                        }
+                    } catch let error as NSError {
+                        print("Failed to load: \(error.localizedDescription)")
+                    }
+                    
+                }
+            }
+        }
+        task.resume()
+        return
+    }
 }
 
 extension ViewController: EmpaticaDelegate {
@@ -184,7 +244,6 @@ extension ViewController: EmpaticaDelegate {
                 self.tableView.reloadData()
                 
                 if self.allDisconnected {
-                
                     EmpaticaAPI.discoverDevices(with: self)
                 }
             }
@@ -192,48 +251,7 @@ extension ViewController: EmpaticaDelegate {
     }
     
     func didUpdate(_ status: BLEStatus) {
-      
-        print("start networking")
-        startLoad()
-//        struct Order: Codable {
-//            let customerId: String
-//            let items: [String]
-//        }
-//
-//        let order = Order(customerId: "12345",
-//                          items: ["Cheese pizza", "Diet soda"])
-//        guard let uploadData = try? JSONEncoder().encode(order) else {
-//            return
-//        }
-//
-//        //
-//
-//        let url = URL(string: "http://127.0.0.1:5000")!
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//        //
-//
-//        let task = URLSession.shared.uploadTask(with: request, from: uploadData) { data, response, error in
-//            if let error = error {
-//                print ("error: \(error)")
-//                return
-//            }
-//            guard let response = response as? HTTPURLResponse,
-//                (200...299).contains(response.statusCode) else {
-//                print ("server error")
-//                return
-//            }
-//            if let mimeType = response.mimeType,
-//                mimeType == "application/json",
-//                let data = data,
-//                let dataString = String(data: data, encoding: .utf8) {
-//                print ("got data: \(dataString)")
-//            }
-//        }
-//        task.resume()
-
+        
         switch status {
         case kBLEStatusReady:
             print("[didUpdate] status \(status.rawValue) • kBLEStatusReady")
@@ -253,36 +271,51 @@ extension ViewController: EmpaticaDelegate {
 extension ViewController: EmpaticaDeviceDelegate {
     
     func didReceiveTemperature(_ temp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
+        
         let date = Date(timeIntervalSince1970: timestamp)
-
         let dateFormatter = DateFormatter()
         dateFormatter.timeZone = TimeZone(abbreviation: "EST")
         dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
         let strDate = dateFormatter.string(from: date)
         print("\(device.serialNumber!) \(strDate) TEMP { \(temp) }")
+        //        delegate?.updateFatigueLevel(self, fatigueLevel: Int(temp))
     }
     
-    func didReceiveAccelerationX(_ x: Int8, y: Int8, z: Int8, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-        
-        print("\(device.serialNumber!) ACC > {x: \(x), y: \(y), z: \(z)}")
-    }
+    //    func didReceiveAccelerationX(_ x: Int8, y: Int8, z: Int8, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
+    //
+    //        print("\(device.serialNumber!) ACC > {x: \(x), y: \(y), z: \(z)}")
+    //    }
     
     func didReceiveIBI(_ ibi: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
-        print("\(device.serialNumber!) IBI { \(ibi) }")
+        let hr = Int(60 / ibi)
+        delegate?.updateHeartRate(self, heartRate: hr)
+        uploadHR(heartRate: hr, timestamp: timestamp)
+        
+        let date = Date(timeIntervalSince1970: timestamp)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
+        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
+        let strDate = dateFormatter.string(from: date)
+        print("\(device.serialNumber!) \(strDate) IBI { \(ibi) }")
     }
     
-    func didReceiveTag(atTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-        
-        print("\(device.serialNumber!) TAG received { \(timestamp) }")
-    }
+    //    func didReceiveTag(atTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
+    //
+    //        print("\(device.serialNumber!) TAG received { \(timestamp) }")
+    //    }
     
-    func didReceiveGSR(_ gsr: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-        
-        print("\(device.serialNumber!) GSR { \(abs(gsr)) }")
-        
-        self.updateValue(device: device, string: "\(String(format: "%.2f", abs(gsr))) µS")
-    }
+    //    func didReceiveGSR(_ gsr: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
+    //
+    //        print("\(device.serialNumber!) GSR { \(abs(gsr)) }")
+    //
+    //        self.updateValue(device: device, string: "\(String(format: "%.2f", abs(gsr))) µS")
+    //    }
+    //    func didReceiveBVP(_ bvp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
+    //
+    //        print("\(device.serialNumber!) BVP { \(timestamp) \(bvp) }")
+    //    }
+    
     
     func didUpdate( _ status: DeviceStatus, forDevice device: EmpaticaDeviceManager!) {
         
@@ -291,35 +324,25 @@ extension ViewController: EmpaticaDeviceDelegate {
         switch status {
             
         case kDeviceStatusDisconnected:
-            
             print("[didUpdate] Disconnected \(device.serialNumber!).")
-            
             self.restartDiscovery()
-            
             break
             
         case kDeviceStatusConnecting:
-            
             print("[didUpdate] Connecting \(device.serialNumber!).")
             break
             
         case kDeviceStatusConnected:
-            
             print("[didUpdate] Connected \(device.serialNumber!).")
             break
             
         case kDeviceStatusFailedToConnect:
-            
             print("[didUpdate] Failed to connect \(device.serialNumber!).")
-            
             self.restartDiscovery()
-            
             break
             
         case kDeviceStatusDisconnecting:
-            
             print("[didUpdate] Disconnecting \(device.serialNumber!).")
-            
             break
             
         default:
@@ -384,14 +407,11 @@ extension ViewController {
 
 class DeviceTableViewCell : UITableViewCell {
     
-    
     var device : EmpaticaDeviceManager
-    
     
     init(device: EmpaticaDeviceManager) {
         
         self.device = device
-        
         super.init(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "device")
     }
     
