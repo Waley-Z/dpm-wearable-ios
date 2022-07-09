@@ -11,6 +11,19 @@ class ViewController: UITableViewController {
     
     private var devices: [EmpaticaDeviceManager] = []
     
+    private var heartRates: [Int] = []
+    private var lastUpdateTime: Double = 0
+    
+    private var age: Int = 20
+    private var restHR: Int = 60
+    private var maxHR: Int = 180
+    private var HRR_CP: Int = 16
+    private var AWC_tot: Int = 200
+    private var AWC_exp: Int = 0
+    
+    private var K_value = 1
+    private var R_value = 1
+    
     init(delegate: ViewControllerDelegate) {
         super.init(style: .plain)
         self.delegate = delegate
@@ -161,7 +174,7 @@ extension ViewController {
     }
 
     // POST
-    func uploadHR(heartRate: Int, timestamp: Double) {
+    func uploadHeartRate(heartRate: Int, timestamp: Double) {
         struct Request: Codable {
             let userKey: String
             let username: String
@@ -205,11 +218,11 @@ extension ViewController {
                             if let fatigue_bool = json["fatigue_bool"] as? Bool {
                                 print(fatigue_bool)
                                 if fatigue_bool {
-                                    if let fatigue_level = json["fatigue_level"] as? Int {
-                                        print(fatigue_level)
-                                        print("fatigue updated")
-                                        delegate?.updateFatigueLevel(self, fatigueLevel: fatigue_level)
-                                    }
+//                                    if let fatigue_level = json["fatigue_level"] as? Int {
+//                                        print(fatigue_level)
+//                                        print("fatigue updated")
+//                                        delegate?.updateFatigueLevel(self, fatigueLevel: fatigue_level)
+//                                    }
                                 }
                             }
                         }
@@ -222,6 +235,33 @@ extension ViewController {
         }
         task.resume()
         return
+    }
+    
+    func assessFatigue() {
+        
+        print("\(Date().timeIntervalSince1970) start assessing \(self.heartRates.count) heart rate data")
+        
+        // calculate HRR
+        let sum = self.heartRates.reduce(0, +)
+        let avgHR = sum / self.heartRates.count
+        let HRR = Int(Double(avgHR - self.restHR) / Double(self.maxHR - self.restHR) * 100)
+        print("avgHR = \(avgHR)")
+        print("HRR = \(HRR)")
+        
+        // assess fatigue
+        self.AWC_exp = max(self.AWC_exp + self.K_value * (HRR - self.HRR_CP), 0)
+        let fatigue = Int(Double(self.AWC_exp) / Double(self.AWC_tot) * 100)
+        print("fatigue = \(fatigue)")
+
+        // update UI
+        print("fatigue updated")
+        delegate?.updateFatigueLevel(self, fatigueLevel: fatigue)
+        
+        // upload
+        
+        
+        self.heartRates = []
+        self.lastUpdateTime = Date().timeIntervalSince1970
     }
 }
 
@@ -288,16 +328,29 @@ extension ViewController: EmpaticaDeviceDelegate {
     
     func didReceiveIBI(_ ibi: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
-        let hr = Int(60 / ibi)
-        delegate?.updateHeartRate(self, heartRate: hr)
-        uploadHR(heartRate: hr, timestamp: timestamp)
+        let heartRate = Int(60 / ibi)
+        self.heartRates.append(heartRate)
         
-        let date = Date(timeIntervalSince1970: timestamp)
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
-        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
-        let strDate = dateFormatter.string(from: date)
-        print("\(device.serialNumber!) \(strDate) IBI { \(ibi) }")
+        // update UI
+        delegate?.updateHeartRate(self, heartRate: heartRate)
+
+        // upload to server
+        uploadHeartRate(heartRate: heartRate, timestamp: timestamp)
+        
+        // check time interval
+        if (timestamp - self.lastUpdateTime > 60) {
+            assessFatigue()
+        }
+        
+        // print
+//        let date = Date(timeIntervalSince1970: timestamp)
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
+//        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
+//        let strDate = dateFormatter.string(from: date)
+//        print("\(device.serialNumber!) \(strDate) IBI { \(ibi) }")
+        print("\(device.serialNumber!) \(timestamp) IBI { \(ibi) }")
+
     }
     
     //    func didReceiveTag(atTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
@@ -334,6 +387,8 @@ extension ViewController: EmpaticaDeviceDelegate {
             
         case kDeviceStatusConnected:
             print("[didUpdate] Connected \(device.serialNumber!).")
+            self.lastUpdateTime = Date().timeIntervalSince1970 + 10
+            print("init lastUpdateTime to \(self.lastUpdateTime).")
             break
             
         case kDeviceStatusFailedToConnect:
