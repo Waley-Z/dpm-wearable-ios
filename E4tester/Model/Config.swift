@@ -11,7 +11,7 @@ import Foundation
 struct Config {
     static let EMPATICA_API_KEY = "7022b7ea8fea4c608b594a828a5c7ad3"
     static let USERNAME = "waley"
-//    static let API_SERVER = "http://192.168.31.235:8080"
-    static let API_SERVER = "https://dpm-wearable-backend-qxkd4ccvqq-uc.a.run.app"
+    static let API_SERVER = "http://192.168.31.235:8080"
+//    static let API_SERVER = "https://dpm-wearable-backend-qxkd4ccvqq-uc.a.run.app"
 
 }

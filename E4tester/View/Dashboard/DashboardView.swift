@@ -9,41 +9,20 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @EnvironmentObject var modelData: ModelData
     
     var body: some View {
-        VStack{
-            SwiftUIViewController()
-                .frame(height: 50)
-                .padding()
-            
+
+        ScrollView{
             VStack{
-                Text("\(self.modelData.heartRate)")
-                    .font(.system(size: 50, weight: .heavy))
-                Text("BPM")
-                    .font(.system(size: 15))
+                SwiftUIViewController()
+                    .frame(height: 50)
+                    .padding()
+                
+                InfoView()
+                
+                Spacer()
+//                CollapsibleView()
             }
-            .fixedSize(horizontal: false, vertical: true)
-            .multilineTextAlignment(.center)
-            .padding()
-            .frame(width: 200, height: 200)
-            .background(Circle().fill(Color.white).shadow(radius: 3))
-            .padding()
-            
-            VStack{
-                Text("\(self.modelData.fatigueLevel)%")
-                    .font(.system(size: 50, weight: .heavy))
-                Text("Fatigue Level")
-                    .font(.system(size: 15))
-            }
-            .font(.system(size: 50, weight: .heavy))
-            .fixedSize(horizontal: false, vertical: true)
-            .multilineTextAlignment(.center)
-            .padding()
-            .frame(width: 200, height: 200)
-            .background(Circle().fill(Color.white).shadow(radius: 3))
-            
-            Spacer()
         }
     }
 }
@@ -57,8 +36,15 @@ struct SwiftUIViewController: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> ViewController {
-        let viewController = ViewController(delegate: context.coordinator)
-        viewController.delegate = context.coordinator
+        let viewController = ViewController(delegate: context.coordinator,
+                                            max_heart_rate: modelData.user.max_heart_rate,
+                                            rest_heart_rate: modelData.user.rest_heart_rate,
+                                            hrr_cp: modelData.user.hrr_cp,
+                                            awc_tot: modelData.user.awc_tot,
+                                            k_value: modelData.user.k_value
+        
+        )
+//        viewController.delegate = context.coordinator
         return viewController
     }
     

@@ -15,10 +15,17 @@
 		59CAB626207771C30052910F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CAB625207771C30052910F /* CoreBluetooth.framework */; };
 		B91AA790286CA26E00B36E84 /* ModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA78F286CA26E00B36E84 /* ModelData.swift */; };
 		B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA791286CA5B700B36E84 /* DashboardView.swift */; };
-		B91AA796286CA62400B36E84 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA795286CA62400B36E84 /* FriendsView.swift */; };
+		B91AA796286CA62400B36E84 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA795286CA62400B36E84 /* ProfileView.swift */; };
 		B91AA79C286D12E900B36E84 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA79B286D12E900B36E84 /* Config.swift */; };
+		B91AA79E287F27A500B36E84 /* CollapsibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA79D287F27A500B36E84 /* CollapsibleView.swift */; };
+		B91AA7A0287F29AA00B36E84 /* Collapsible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA79F287F29AA00B36E84 /* Collapsible.swift */; };
+		B91AA7A5287F352100B36E84 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA7A4287F352100B36E84 /* InfoView.swift */; };
 		B93AB80A285D8E6E0008DC59 /* DPMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93AB809285D8E6E0008DC59 /* DPMApp.swift */; };
 		B93AB80C285D8EF10008DC59 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93AB80B285D8EF10008DC59 /* ContentView.swift */; };
+		B9D051B22888435800AAC9D8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B12888435800AAC9D8 /* LoginView.swift */; };
+		B9D051B42888627300AAC9D8 /* LoginDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B32888627300AAC9D8 /* LoginDetailView.swift */; };
+		B9D051B628887D2B00AAC9D8 /* FloatingLabelInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B528887D2B00AAC9D8 /* FloatingLabelInput.swift */; };
+		B9D051B82888841E00AAC9D8 /* FloatingLabelInputInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B72888841E00AAC9D8 /* FloatingLabelInputInt.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,10 +53,17 @@
 		59CAB625207771C30052910F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		B91AA78F286CA26E00B36E84 /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
 		B91AA791286CA5B700B36E84 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		B91AA795286CA62400B36E84 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		B91AA795286CA62400B36E84 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B91AA79B286D12E900B36E84 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		B91AA79D287F27A500B36E84 /* CollapsibleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleView.swift; sourceTree = "<group>"; };
+		B91AA79F287F29AA00B36E84 /* Collapsible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collapsible.swift; sourceTree = "<group>"; };
+		B91AA7A4287F352100B36E84 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B93AB809285D8E6E0008DC59 /* DPMApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPMApp.swift; sourceTree = "<group>"; };
 		B93AB80B285D8EF10008DC59 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B9D051B12888435800AAC9D8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		B9D051B32888627300AAC9D8 /* LoginDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDetailView.swift; sourceTree = "<group>"; };
+		B9D051B528887D2B00AAC9D8 /* FloatingLabelInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingLabelInput.swift; sourceTree = "<group>"; };
+		B9D051B72888841E00AAC9D8 /* FloatingLabelInputInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingLabelInputInt.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,8 +124,9 @@
 			isa = PBXGroup;
 			children = (
 				B93AB80B285D8EF10008DC59 /* ContentView.swift */,
+				B9D051B02888434700AAC9D8 /* Login */,
 				B91AA799286D0D0400B36E84 /* Dashboard */,
-				B91AA79A286D0D1900B36E84 /* Friends */,
+				B91AA79A286D0D1900B36E84 /* Profile */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -130,16 +145,30 @@
 			children = (
 				B91AA791286CA5B700B36E84 /* DashboardView.swift */,
 				55591B6A1F2884AC0084CF0C /* ViewController.swift */,
+				B91AA79D287F27A500B36E84 /* CollapsibleView.swift */,
+				B91AA79F287F29AA00B36E84 /* Collapsible.swift */,
+				B91AA7A4287F352100B36E84 /* InfoView.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
-		B91AA79A286D0D1900B36E84 /* Friends */ = {
+		B91AA79A286D0D1900B36E84 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				B91AA795286CA62400B36E84 /* FriendsView.swift */,
+				B91AA795286CA62400B36E84 /* ProfileView.swift */,
 			);
-			path = Friends;
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		B9D051B02888434700AAC9D8 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				B9D051B12888435800AAC9D8 /* LoginView.swift */,
+				B9D051B32888627300AAC9D8 /* LoginDetailView.swift */,
+				B9D051B528887D2B00AAC9D8 /* FloatingLabelInput.swift */,
+				B9D051B72888841E00AAC9D8 /* FloatingLabelInputInt.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -159,6 +188,8 @@
 			dependencies = (
 			);
 			name = E4tester;
+			packageProductDependencies = (
+			);
 			productName = E4Tests;
 			productReference = 55591B651F2884AC0084CF0C /* E4tester.app */;
 			productType = "com.apple.product-type.application";
@@ -195,6 +226,8 @@
 				Base,
 			);
 			mainGroup = 55591B5C1F2884AC0084CF0C;
+			packageReferences = (
+			);
 			productRefGroup = 55591B661F2884AC0084CF0C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -222,12 +255,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B91AA796286CA62400B36E84 /* FriendsView.swift in Sources */,
+				B91AA796286CA62400B36E84 /* ProfileView.swift in Sources */,
 				55591B6B1F2884AC0084CF0C /* ViewController.swift in Sources */,
+				B91AA7A0287F29AA00B36E84 /* Collapsible.swift in Sources */,
+				B9D051B42888627300AAC9D8 /* LoginDetailView.swift in Sources */,
 				B91AA790286CA26E00B36E84 /* ModelData.swift in Sources */,
 				B91AA79C286D12E900B36E84 /* Config.swift in Sources */,
 				B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */,
 				B93AB80A285D8E6E0008DC59 /* DPMApp.swift in Sources */,
+				B9D051B628887D2B00AAC9D8 /* FloatingLabelInput.swift in Sources */,
+				B91AA79E287F27A500B36E84 /* CollapsibleView.swift in Sources */,
+				B9D051B22888435800AAC9D8 /* LoginView.swift in Sources */,
+				B9D051B82888841E00AAC9D8 /* FloatingLabelInputInt.swift in Sources */,
+				B91AA7A5287F352100B36E84 /* InfoView.swift in Sources */,
 				B93AB80C285D8EF10008DC59 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

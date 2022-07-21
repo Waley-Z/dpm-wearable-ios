@@ -4,29 +4,33 @@
 //
 
 import UIKit
+import SwiftUI
 
 class ViewController: UITableViewController {
-    
     weak var delegate: ViewControllerDelegate?
     
     private var devices: [EmpaticaDeviceManager] = []
+    private var serialNum: String = ""
     
     private var heartRates: [Int] = []
     private var lastUpdateTime: Double = 0
     
-    private var age: Int = 20
-    private var restHR: Int = 60
-    private var maxHR: Int = 180
-    private var HRR_CP: Int = 16
-    private var AWC_tot: Int = 200
-    private var AWC_exp: Int = 0
+    private var rest_heart_rate: Int = 60
+    private var max_heart_rate: Int = 180
+    private var hrr_cp: Int = 16
+    private var awc_tot: Int = 200
+    private var awc_exp: Int = 0
     
-    private var K_value = 1
-    private var R_value = 1
+    private var k_value = 1
     
-    init(delegate: ViewControllerDelegate) {
+    init(delegate: ViewControllerDelegate, max_heart_rate:Int, rest_heart_rate:Int, hrr_cp: Int, awc_tot: Int, k_value: Int) {
         super.init(style: .plain)
         self.delegate = delegate
+        self.max_heart_rate = max_heart_rate
+        self.rest_heart_rate = rest_heart_rate
+        self.hrr_cp = hrr_cp
+        self.awc_tot = awc_tot
+        self.k_value = k_value
     }
     
     required init?(coder: NSCoder) {
@@ -146,8 +150,19 @@ protocol ViewControllerDelegate: AnyObject {
 }
 
 
+// utilities
 extension ViewController {
-        
+    
+    // convert timestamp to date string
+    func ts2date(timestamp: Double) -> String {
+        let date = Date(timeIntervalSince1970: timestamp)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
+        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
+        let strDate = dateFormatter.string(from: date)
+        return strDate
+    }
+    
     // GET
     func startLoad() {
         let url = URL(string: "http://192.168.31.235:8080")!
@@ -208,8 +223,7 @@ extension ViewController {
                 let data = data,
                 let dataString = String(data: data, encoding: .utf8) {
                 
-                DispatchQueue.main.async { [self] in
-
+                DispatchQueue.main.async {
                     print ("got data: \(dataString)")
                     do {
                         // make sure this JSON is in the format we expect
@@ -244,13 +258,13 @@ extension ViewController {
         // calculate HRR
         let sum = self.heartRates.reduce(0, +)
         let avgHR = sum / self.heartRates.count
-        let HRR = Int(Double(avgHR - self.restHR) / Double(self.maxHR - self.restHR) * 100)
+        let HRR = Int(Double(avgHR - self.rest_heart_rate) / Double(self.max_heart_rate - self.rest_heart_rate) * 100)
         print("avgHR = \(avgHR)")
         print("HRR = \(HRR)")
         
         // assess fatigue
-        self.AWC_exp = max(self.AWC_exp + self.K_value * (HRR - self.HRR_CP), 0)
-        let fatigue = Int(Double(self.AWC_exp) / Double(self.AWC_tot) * 100)
+        self.awc_exp = max(self.awc_exp + self.k_value * (HRR - self.hrr_cp), 0)
+        let fatigue = Int(Double(self.awc_exp) / Double(self.awc_tot) * 100)
         print("fatigue = \(fatigue)")
 
         // update UI
@@ -312,19 +326,10 @@ extension ViewController: EmpaticaDeviceDelegate {
     
     func didReceiveTemperature(_ temp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
-        let date = Date(timeIntervalSince1970: timestamp)
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
-        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
-        let strDate = dateFormatter.string(from: date)
+        let strDate = ts2date(timestamp: timestamp)
         print("\(device.serialNumber!) \(strDate) TEMP { \(temp) }")
         //        delegate?.updateFatigueLevel(self, fatigueLevel: Int(temp))
     }
-    
-    //    func didReceiveAccelerationX(_ x: Int8, y: Int8, z: Int8, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-    //
-    //        print("\(device.serialNumber!) ACC > {x: \(x), y: \(y), z: \(z)}")
-    //    }
     
     func didReceiveIBI(_ ibi: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
@@ -353,17 +358,6 @@ extension ViewController: EmpaticaDeviceDelegate {
 
     }
     
-    //    func didReceiveTag(atTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-    //
-    //        print("\(device.serialNumber!) TAG received { \(timestamp) }")
-    //    }
-    
-    //    func didReceiveGSR(_ gsr: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-    //
-    //        print("\(device.serialNumber!) GSR { \(abs(gsr)) }")
-    //
-    //        self.updateValue(device: device, string: "\(String(format: "%.2f", abs(gsr))) µS")
-    //    }
     //    func didReceiveBVP(_ bvp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
     //
     //        print("\(device.serialNumber!) BVP { \(timestamp) \(bvp) }")
