@@ -12,6 +12,8 @@ class ViewController: UITableViewController {
     private var devices: [EmpaticaDeviceManager] = []
     private var serialNum: String = ""
     
+    private var user_id: Int = -1
+    
     private var heartRates: [Int] = []
     private var lastUpdateTime: Double = 0
     
@@ -23,9 +25,10 @@ class ViewController: UITableViewController {
     
     private var k_value = 1
     
-    init(delegate: ViewControllerDelegate, max_heart_rate:Int, rest_heart_rate:Int, hrr_cp: Int, awc_tot: Int, k_value: Int) {
+    init(delegate: ViewControllerDelegate, user_id: Int, max_heart_rate: Int, rest_heart_rate: Int, hrr_cp: Int, awc_tot: Int, k_value: Int) {
         super.init(style: .plain)
         self.delegate = delegate
+        self.user_id = user_id
         self.max_heart_rate = max_heart_rate
         self.rest_heart_rate = rest_heart_rate
         self.hrr_cp = hrr_cp
@@ -162,43 +165,16 @@ extension ViewController {
         let strDate = dateFormatter.string(from: date)
         return strDate
     }
-    
-    // GET
-    func startLoad() {
-        let url = URL(string: "http://192.168.31.235:8080")!
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print ("error: \(error)")
-                return
-            }
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                print ("error: server error")
-                return
-            }
-            if let mimeType = httpResponse.mimeType, mimeType == "text/html",
-               let data = data,
-               let string = String(data: data, encoding: .utf8) {
-                print("success")
-                DispatchQueue.main.async {
-                    print(string)
-                }
-            }
-        }
-        task.resume()
-    }
 
     // POST
     func uploadHeartRate(heartRate: Int, timestamp: Double) {
         struct Request: Codable {
-            let userKey: String
-            let username: String
+            let user_id: Int
             let heart_rate: Int
             let timestamp: Double
         }
         
-        let request_json = Request(userKey: Config.EMPATICA_API_KEY, username: Config.USERNAME,
-                                   heart_rate: heartRate, timestamp: timestamp)
+        let request_json = Request(user_id: self.user_id, heart_rate: heartRate, timestamp: timestamp)
         guard let encoded_json = try? JSONEncoder().encode(request_json) else {
             return
         }

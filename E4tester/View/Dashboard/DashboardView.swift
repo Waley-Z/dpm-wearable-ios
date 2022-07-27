@@ -9,19 +9,36 @@
 import SwiftUI
 
 struct DashboardView: View {
-    
-    var body: some View {
 
+    var body: some View {
+        
         ScrollView{
-            VStack{
+            VStack(alignment: .leading){
                 SwiftUIViewController()
                     .frame(height: 50)
                     .padding()
                 
-                InfoView()
+                HStack{
+                    Image(systemName: "hand.wave.fill")
+                    Text("Hello, John")
+                }
+                .font(.system(size: 20, weight: .semibold))
+                .padding([.horizontal], 20)
                 
-                Spacer()
-//                CollapsibleView()
+                InfoView()
+                    .frame(height: 200)
+                    .padding([.horizontal], 20)
+                
+                HStack{
+                    Image(systemName: "person.2.fill")
+                    Text("My Crew")
+                }
+                .font(.system(size: 20, weight: .semibold))
+                .padding([.horizontal], 20)
+                
+                CrewView()
+                    .padding([.horizontal], 20)
+                //                CollapsibleView()
             }
         }
     }
@@ -37,14 +54,15 @@ struct SwiftUIViewController: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> ViewController {
         let viewController = ViewController(delegate: context.coordinator,
+                                            user_id: modelData.user.user_id,
                                             max_heart_rate: modelData.user.max_heart_rate,
                                             rest_heart_rate: modelData.user.rest_heart_rate,
                                             hrr_cp: modelData.user.hrr_cp,
                                             awc_tot: modelData.user.awc_tot,
                                             k_value: modelData.user.k_value
-        
+                                            
         )
-//        viewController.delegate = context.coordinator
+        //        viewController.delegate = context.coordinator
         return viewController
     }
     
@@ -76,5 +94,6 @@ struct SwiftUIViewController: UIViewControllerRepresentable {
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
         DashboardView()
+            .environmentObject(ModelData())
     }
 }

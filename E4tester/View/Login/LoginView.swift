@@ -17,6 +17,7 @@ struct LoginView: View {
             Button{
                 print("clicked")
                 Task {
+                    modelData.user.fullname = trimStr(str: modelData.user.fullname)
                     await modelData.queryName()
                     modelData.nameEntered = true
                 }

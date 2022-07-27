@@ -17,15 +17,21 @@
 		B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA791286CA5B700B36E84 /* DashboardView.swift */; };
 		B91AA796286CA62400B36E84 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA795286CA62400B36E84 /* ProfileView.swift */; };
 		B91AA79C286D12E900B36E84 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA79B286D12E900B36E84 /* Config.swift */; };
-		B91AA79E287F27A500B36E84 /* CollapsibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA79D287F27A500B36E84 /* CollapsibleView.swift */; };
-		B91AA7A0287F29AA00B36E84 /* Collapsible.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA79F287F29AA00B36E84 /* Collapsible.swift */; };
 		B91AA7A5287F352100B36E84 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA7A4287F352100B36E84 /* InfoView.swift */; };
 		B93AB80A285D8E6E0008DC59 /* DPMApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93AB809285D8E6E0008DC59 /* DPMApp.swift */; };
 		B93AB80C285D8EF10008DC59 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B93AB80B285D8EF10008DC59 /* ContentView.swift */; };
 		B9D051B22888435800AAC9D8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B12888435800AAC9D8 /* LoginView.swift */; };
 		B9D051B42888627300AAC9D8 /* LoginDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B32888627300AAC9D8 /* LoginDetailView.swift */; };
 		B9D051B628887D2B00AAC9D8 /* FloatingLabelInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B528887D2B00AAC9D8 /* FloatingLabelInput.swift */; };
-		B9D051B82888841E00AAC9D8 /* FloatingLabelInputInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B72888841E00AAC9D8 /* FloatingLabelInputInt.swift */; };
+		B9D051BA288B11B400AAC9D8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051B9288B11B400AAC9D8 /* User.swift */; };
+		B9D051BC288B21B500AAC9D8 /* Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051BB288B21B500AAC9D8 /* Input.swift */; };
+		B9D051BE288B21EA00AAC9D8 /* Peer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051BD288B21EA00AAC9D8 /* Peer.swift */; };
+		B9D051C0288B27A300AAC9D8 /* CrewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051BF288B27A300AAC9D8 /* CrewView.swift */; };
+		B9D051C2288B2D5F00AAC9D8 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051C1288B2D5F00AAC9D8 /* ResponseModel.swift */; };
+		B9D051C8288B6CB400AAC9D8 /* FatigueLevelGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051C7288B6CB400AAC9D8 /* FatigueLevelGraph.swift */; };
+		B9D051CA288B6CB900AAC9D8 /* GraphCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051C9288B6CB900AAC9D8 /* GraphCapsule.swift */; };
+		B9D051CE288B795B00AAC9D8 /* PeerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051CD288B795B00AAC9D8 /* PeerView.swift */; };
+		B9D051D128908DD100AAC9D8 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051D028908DD100AAC9D8 /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,15 +61,21 @@
 		B91AA791286CA5B700B36E84 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		B91AA795286CA62400B36E84 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		B91AA79B286D12E900B36E84 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		B91AA79D287F27A500B36E84 /* CollapsibleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleView.swift; sourceTree = "<group>"; };
-		B91AA79F287F29AA00B36E84 /* Collapsible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collapsible.swift; sourceTree = "<group>"; };
 		B91AA7A4287F352100B36E84 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B93AB809285D8E6E0008DC59 /* DPMApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPMApp.swift; sourceTree = "<group>"; };
 		B93AB80B285D8EF10008DC59 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B9D051B12888435800AAC9D8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B9D051B32888627300AAC9D8 /* LoginDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDetailView.swift; sourceTree = "<group>"; };
 		B9D051B528887D2B00AAC9D8 /* FloatingLabelInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingLabelInput.swift; sourceTree = "<group>"; };
-		B9D051B72888841E00AAC9D8 /* FloatingLabelInputInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingLabelInputInt.swift; sourceTree = "<group>"; };
+		B9D051B9288B11B400AAC9D8 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B9D051BB288B21B500AAC9D8 /* Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Input.swift; sourceTree = "<group>"; };
+		B9D051BD288B21EA00AAC9D8 /* Peer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peer.swift; sourceTree = "<group>"; };
+		B9D051BF288B27A300AAC9D8 /* CrewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrewView.swift; sourceTree = "<group>"; };
+		B9D051C1288B2D5F00AAC9D8 /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
+		B9D051C7288B6CB400AAC9D8 /* FatigueLevelGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FatigueLevelGraph.swift; sourceTree = "<group>"; };
+		B9D051C9288B6CB900AAC9D8 /* GraphCapsule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphCapsule.swift; sourceTree = "<group>"; };
+		B9D051CD288B795B00AAC9D8 /* PeerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerView.swift; sourceTree = "<group>"; };
+		B9D051D028908DD100AAC9D8 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +148,11 @@
 			children = (
 				B91AA78F286CA26E00B36E84 /* ModelData.swift */,
 				B91AA79B286D12E900B36E84 /* Config.swift */,
+				B9D051B9288B11B400AAC9D8 /* User.swift */,
+				B9D051BB288B21B500AAC9D8 /* Input.swift */,
+				B9D051BD288B21EA00AAC9D8 /* Peer.swift */,
+				B9D051C1288B2D5F00AAC9D8 /* ResponseModel.swift */,
+				B9D051D028908DD100AAC9D8 /* Utilities.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -145,9 +162,8 @@
 			children = (
 				B91AA791286CA5B700B36E84 /* DashboardView.swift */,
 				55591B6A1F2884AC0084CF0C /* ViewController.swift */,
-				B91AA79D287F27A500B36E84 /* CollapsibleView.swift */,
-				B91AA79F287F29AA00B36E84 /* Collapsible.swift */,
 				B91AA7A4287F352100B36E84 /* InfoView.swift */,
+				B9D051CF288B797000AAC9D8 /* MyCrew */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -166,9 +182,19 @@
 				B9D051B12888435800AAC9D8 /* LoginView.swift */,
 				B9D051B32888627300AAC9D8 /* LoginDetailView.swift */,
 				B9D051B528887D2B00AAC9D8 /* FloatingLabelInput.swift */,
-				B9D051B72888841E00AAC9D8 /* FloatingLabelInputInt.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		B9D051CF288B797000AAC9D8 /* MyCrew */ = {
+			isa = PBXGroup;
+			children = (
+				B9D051BF288B27A300AAC9D8 /* CrewView.swift */,
+				B9D051CD288B795B00AAC9D8 /* PeerView.swift */,
+				B9D051C7288B6CB400AAC9D8 /* FatigueLevelGraph.swift */,
+				B9D051C9288B6CB900AAC9D8 /* GraphCapsule.swift */,
+			);
+			path = MyCrew;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,19 +281,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D051BC288B21B500AAC9D8 /* Input.swift in Sources */,
+				B9D051BE288B21EA00AAC9D8 /* Peer.swift in Sources */,
 				B91AA796286CA62400B36E84 /* ProfileView.swift in Sources */,
+				B9D051C8288B6CB400AAC9D8 /* FatigueLevelGraph.swift in Sources */,
+				B9D051CE288B795B00AAC9D8 /* PeerView.swift in Sources */,
 				55591B6B1F2884AC0084CF0C /* ViewController.swift in Sources */,
-				B91AA7A0287F29AA00B36E84 /* Collapsible.swift in Sources */,
+				B9D051CA288B6CB900AAC9D8 /* GraphCapsule.swift in Sources */,
 				B9D051B42888627300AAC9D8 /* LoginDetailView.swift in Sources */,
 				B91AA790286CA26E00B36E84 /* ModelData.swift in Sources */,
 				B91AA79C286D12E900B36E84 /* Config.swift in Sources */,
+				B9D051BA288B11B400AAC9D8 /* User.swift in Sources */,
 				B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */,
 				B93AB80A285D8E6E0008DC59 /* DPMApp.swift in Sources */,
 				B9D051B628887D2B00AAC9D8 /* FloatingLabelInput.swift in Sources */,
-				B91AA79E287F27A500B36E84 /* CollapsibleView.swift in Sources */,
+				B9D051C0288B27A300AAC9D8 /* CrewView.swift in Sources */,
+				B9D051C2288B2D5F00AAC9D8 /* ResponseModel.swift in Sources */,
 				B9D051B22888435800AAC9D8 /* LoginView.swift in Sources */,
-				B9D051B82888841E00AAC9D8 /* FloatingLabelInputInt.swift in Sources */,
 				B91AA7A5287F352100B36E84 /* InfoView.swift in Sources */,
+				B9D051D128908DD100AAC9D8 /* Utilities.swift in Sources */,
 				B93AB80C285D8EF10008DC59 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,6 +483,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 52N826U726;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
