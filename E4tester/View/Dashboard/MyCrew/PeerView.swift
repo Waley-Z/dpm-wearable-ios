@@ -18,11 +18,31 @@ extension AnyTransition {
 }
 
 struct PeerView: View {
+    @EnvironmentObject var modelData: ModelData
+
     var peer: Peer
     @State private var showDetail = false
-    let timer = Timer.publish(every: 5,tolerance: 10, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     @State var relativeDate: String = ""
 
+    func fatigueLevelDisplay(fatigue_level: Int) -> String {
+        if (fatigue_level == -1) {
+            return "N/A"
+        } else if (fatigue_level >= 100) {
+            return "100%"
+        } else {
+            return String(fatigue_level) + "%"
+        }
+    }
+    
+    func relativeDateDisplay(last_update: Int) -> String {
+        if (last_update < 1662472360){
+            return ""
+        } else {
+            return Date(timeIntervalSince1970: Double(last_update)).timeAgoDisplay()
+        }
+    }
+    
     var body: some View {
         VStack {
             HStack {
@@ -30,19 +50,19 @@ struct PeerView: View {
                     .frame(width: 50, height: 30)
 
                 VStack(alignment: .leading) {
-                    Text(peer.fullname)
+                    Text(peer.first_name)
                         .font(.headline)
                     HStack{
-                        Text(String(peer.fatigue_level) + "%")
+                        Text(fatigueLevelDisplay(fatigue_level: peer.fatigue_level))
 //                            .font(.callout)
                         Text(relativeDate)
                             .foregroundColor(.secondary)
                             .onReceive(timer) { _ in
-                                print("update last_update")
-                                self.relativeDate = Date(timeIntervalSince1970: Double(peer.last_update)).timeAgoDisplay()
+                                print("update peer last_update")
+                                self.relativeDate = relativeDateDisplay(last_update: peer.last_update)
                             }
                             .onAppear() {
-                                self.relativeDate = Date(timeIntervalSince1970: Double(peer.last_update)).timeAgoDisplay()
+                                self.relativeDate = relativeDateDisplay(last_update: peer.last_update)
                             }
                     }
                 }
@@ -65,6 +85,10 @@ struct PeerView: View {
 
             if showDetail {
                 HStack{
+                    Text("Fatigue Level")
+                        .rotationEffect(.degrees(270))
+                        .fixedSize()
+                        .frame(width: 10, height: 90)
                     VStack{
                         Text("100%")
                         Spacer()
@@ -79,9 +103,11 @@ struct PeerView: View {
                             Text("")
                         }
                     }
+//                    .border(Color.gray)
                     VStack{
                         FatigueLevelGraph(peer: peer)
                             .frame(height: 200)
+//                            .border(Color.gray)
                         HStack() {
                             Text("6am")
                             Spacer()
@@ -92,11 +118,23 @@ struct PeerView: View {
                             Text("3pm")
                             Spacer()
                         }
+//                        .border(Color.gray)
+
                     }
                 }
                 .font(.system(size: 12))
                 .foregroundColor(.secondary)
                 .transition(.moveAndFade)
+                .onAppear() {
+                    Task {
+                        await modelData.uploadActivity(peer_id: peer.id, if_open: true)
+                    }
+                }
+                .onDisappear() {
+                    Task {
+                        await modelData.uploadActivity(peer_id: peer.id, if_open: false)
+                    }
+                }
             }
         }
     }

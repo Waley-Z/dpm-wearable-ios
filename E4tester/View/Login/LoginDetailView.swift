@@ -13,7 +13,8 @@ struct LoginDetailView: View {
 
     var body: some View {
         VStack{
-            FloatingLabelInput(label: "Name", text: $modelData.user.fullname)
+            FloatingLabelInput(label: "First Name", text: $modelData.user.first_name)
+            FloatingLabelInput(label: "Last Name", text: $modelData.user.last_name)
             FloatingLabelInput(label: "Group ID", text: $modelData.user.group_id)
             FloatingLabelInput(label: "Age", text: $modelData.inputs.age)
             FloatingLabelInput(label: "Rest Heart Rate", text: $modelData.inputs.rest_heart_rate)

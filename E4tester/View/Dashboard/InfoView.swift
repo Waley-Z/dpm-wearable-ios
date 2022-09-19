@@ -11,6 +11,13 @@ import SwiftUI
 struct InfoView: View {
     @EnvironmentObject var modelData: ModelData
     
+    func fatigueLevelDisplay(fatigueLevel: Int) -> String {
+        if (fatigueLevel > 100) {
+            return "100"
+        }
+        return String(fatigueLevel)
+    }
+    
     var body: some View {
         HStack{
             ZStack{
@@ -18,8 +25,8 @@ struct InfoView: View {
                 Circle().fill(Color.white).shadow(radius: 3)
                 
                 HStack{
-                    //Text("\(self.modelData.heartRate)")
-                    Text("50")
+                    Text("\(self.modelData.heartRate)")
+//                    Text("50")
                         .font(.system(size: 70, weight: .heavy))
                         .scaledToFill()
                         .minimumScaleFactor(0.1)
@@ -50,7 +57,8 @@ struct InfoView: View {
                 
                 VStack (spacing: 0){
                     HStack(alignment: .bottom, spacing: 3){
-                        Text("10")
+//                        Text("10")
+                        Text(self.fatigueLevelDisplay(fatigueLevel: self.modelData.fatigueLevel))
                             .font(.system(size: 60, weight: .heavy))
                             .scaledToFill()
                             .minimumScaleFactor(0.5)

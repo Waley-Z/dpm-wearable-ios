@@ -9,18 +9,23 @@
 import SwiftUI
 
 struct DashboardView: View {
+    @EnvironmentObject var modelData: ModelData
+    
+    let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 
     var body: some View {
         
         ScrollView{
             VStack(alignment: .leading){
-                SwiftUIViewController()
-                    .frame(height: 50)
-                    .padding()
+                if (modelData.user.user_id != -1) {
+                    SwiftUIViewController()
+                        .frame(height: 50)
+                        .padding()
+                }
                 
                 HStack{
                     Image(systemName: "hand.wave.fill")
-                    Text("Hello, John")
+                    Text("Hello, \(self.modelData.user.first_name)")
                 }
                 .font(.system(size: 20, weight: .semibold))
                 .padding([.horizontal], 20)
@@ -39,6 +44,19 @@ struct DashboardView: View {
                 CrewView()
                     .padding([.horizontal], 20)
                 //                CollapsibleView()
+//                    .onReceive(Timer.publish(every: 5, tolerance: 5, on: .main, in: .default)) { (_) in
+                    .onReceive(timer) { _ in
+                        print("update crew")
+                        Task {
+                            await modelData.updateCrew()
+                        }
+                    }
+                    .onAppear {
+                        print("init crew")
+                        Task {
+                            await modelData.updateCrew()
+                        }
+                    }
             }
         }
     }
@@ -53,6 +71,9 @@ struct SwiftUIViewController: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> ViewController {
+        if (modelData.user.user_id == -1) {
+            print("error init")
+        }
         let viewController = ViewController(delegate: context.coordinator,
                                             user_id: modelData.user.user_id,
                                             max_heart_rate: modelData.user.max_heart_rate,

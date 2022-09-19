@@ -15,11 +15,11 @@ struct GraphCapsule: View, Equatable {
     let overallRange: Range<Int> = 0..<100
 
     var heightRatio: CGFloat {
-        range == -1 ..< -1 ? 0.0 : max(CGFloat(magnitude(of: range) / magnitude(of: overallRange)), 0.15)
+        range == -1 ..< -1 ? 0.0 : max(CGFloat(magnitude(of: range) / magnitude(of: overallRange)), 0.12)
     }
 
     var offsetRatio: CGFloat {
-        CGFloat(Double(range.lowerBound - overallRange.lowerBound) / magnitude(of: overallRange))
+        CGFloat((Double(range.lowerBound)*0.88 - Double(overallRange.lowerBound)) / magnitude(of: overallRange) - 0.03)
     }
 
     var body: some View {
@@ -27,10 +27,10 @@ struct GraphCapsule: View, Equatable {
             .fill(color)
             .frame(height: height * heightRatio)
             .offset(x: 0, y: height * -offsetRatio)
-            .onAppear() {
-                print(range)
-                print(index)
-            }
+//            .onAppear() {
+//                print(range)
+//                print(index)
+//            }
 
     }
 }

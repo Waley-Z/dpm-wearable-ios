@@ -11,7 +11,7 @@ import Foundation
 struct Peer : Identifiable {
     var id: Int // user_id
     
-    var fullname: String = ""
+    var first_name: String = ""
     var fatigue_level = 0
     var last_update: Int = 0
     var observations: [Observation]

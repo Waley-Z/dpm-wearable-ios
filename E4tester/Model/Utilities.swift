@@ -11,3 +11,15 @@ import Foundation
 func trimStr(str: String) -> String {
     return str.trimmingCharacters(in: .whitespacesAndNewlines)
 }
+
+func fileURL() throws -> URL {
+    try FileManager.default.url(for: .documentDirectory,
+                                   in: .userDomainMask,
+                                   appropriateFor: nil,
+                                   create: false)
+        .appendingPathComponent("user.data")
+}
+
+func ifLessThanNHours(timestamp: Double, hours: Double) -> Bool {
+    return (Date().timeIntervalSince1970 - timestamp <= hours * 3600)
+}

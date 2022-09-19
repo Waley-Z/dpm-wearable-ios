@@ -14,7 +14,7 @@ struct UpdateCrewResponseModel: Decodable {
 
 struct PeerResponseModel: Decodable {
     var user_id: Int
-    var fullname: String
+    var first_name: String
     var fatigue_level: Int
     var last_update: Int
 }

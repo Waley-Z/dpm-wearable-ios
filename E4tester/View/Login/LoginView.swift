@@ -13,11 +13,13 @@ struct LoginView: View {
     
     var body: some View {
         VStack{
-            FloatingLabelInput(label: "Name", text: $modelData.user.fullname)
+            FloatingLabelInput(label: "First Name", text: $modelData.user.first_name)
+            FloatingLabelInput(label: "Last Name", text: $modelData.user.last_name)
             Button{
                 print("clicked")
                 Task {
-                    modelData.user.fullname = trimStr(str: modelData.user.fullname)
+                    modelData.user.first_name = trimStr(str: modelData.user.first_name)
+                    modelData.user.last_name = trimStr(str: modelData.user.last_name)
                     await modelData.queryName()
                     modelData.nameEntered = true
                 }

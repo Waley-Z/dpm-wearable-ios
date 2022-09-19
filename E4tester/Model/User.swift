@@ -8,8 +8,9 @@
 
 import Foundation
 
-struct User: Decodable {
-    var fullname: String = ""
+struct User: Encodable, Decodable {
+    var first_name: String = ""
+    var last_name: String = ""
     var user_id: Int = -1
     var group_id: String = ""
     var age: Int = -1

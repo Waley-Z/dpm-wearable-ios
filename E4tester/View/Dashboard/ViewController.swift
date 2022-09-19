@@ -23,7 +23,7 @@ class ViewController: UITableViewController {
     private var awc_tot: Int = 200
     private var awc_exp: Int = 0
     
-    private var k_value = 1
+    private var k_value: Int = 1
     
     init(delegate: ViewControllerDelegate, user_id: Int, max_heart_rate: Int, rest_heart_rate: Int, hrr_cp: Int, awc_tot: Int, k_value: Int) {
         super.init(style: .plain)
@@ -34,6 +34,7 @@ class ViewController: UITableViewController {
         self.hrr_cp = hrr_cp
         self.awc_tot = awc_tot
         self.k_value = k_value
+        print("viewcontroller user_id: \(user_id)")
     }
     
     required init?(coder: NSCoder) {
@@ -179,7 +180,7 @@ extension ViewController {
             return
         }
         
-        let url = URL(string: Config.API_SERVER + "/api/v1/data/heart_rate/")!
+        let url = URL(string: Config.API_SERVER + "/api/v1/upload/heart_rate/")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -201,25 +202,48 @@ extension ViewController {
                 
                 DispatchQueue.main.async {
                     print ("got data: \(dataString)")
-                    do {
-                        // make sure this JSON is in the format we expect
-                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                            // try to read out a string array
-                            if let fatigue_bool = json["fatigue_bool"] as? Bool {
-                                print(fatigue_bool)
-                                if fatigue_bool {
-//                                    if let fatigue_level = json["fatigue_level"] as? Int {
-//                                        print(fatigue_level)
-//                                        print("fatigue updated")
-//                                        delegate?.updateFatigueLevel(self, fatigueLevel: fatigue_level)
-//                                    }
-                                }
-                            }
-                        }
-                    } catch let error as NSError {
-                        print("Failed to load: \(error.localizedDescription)")
-                    }
-                    
+                }
+            }
+        }
+        task.resume()
+        return
+    }
+    
+    // POST
+    func uploadFatigueLevel(fatigueLevel: Int, timestamp: Double) {
+        struct Request: Codable {
+            let user_id: Int
+            let fatigue_level: Int
+            let timestamp: Double
+        }
+        
+        let request_json = Request(user_id: self.user_id, fatigue_level: fatigueLevel, timestamp: timestamp)
+        guard let encoded_json = try? JSONEncoder().encode(request_json) else {
+            return
+        }
+        
+        let url = URL(string: Config.API_SERVER + "/api/v1/upload/fatigue_level/")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let task = URLSession.shared.uploadTask(with: request, from: encoded_json) { data, response, error in
+            if let error = error {
+                print ("error: \(error)")
+                return
+            }
+            guard let response = response as? HTTPURLResponse,
+                  (200...299).contains(response.statusCode) else {
+                print ("server error")
+                return
+            }
+            if let mimeType = response.mimeType,
+                mimeType == "application/json",
+                let data = data,
+                let dataString = String(data: data, encoding: .utf8) {
+                
+                DispatchQueue.main.async {
+                    print ("got data: \(dataString)")
                 }
             }
         }
@@ -233,7 +257,7 @@ extension ViewController {
         
         // calculate HRR
         let sum = self.heartRates.reduce(0, +)
-        let avgHR = sum / self.heartRates.count
+        let avgHR = sum / self.heartRates.count // average heartrate within one minute
         let HRR = Int(Double(avgHR - self.rest_heart_rate) / Double(self.max_heart_rate - self.rest_heart_rate) * 100)
         print("avgHR = \(avgHR)")
         print("HRR = \(HRR)")
@@ -248,8 +272,8 @@ extension ViewController {
         delegate?.updateFatigueLevel(self, fatigueLevel: fatigue)
         
         // upload
-        
-        
+        uploadFatigueLevel(fatigueLevel: fatigue, timestamp: Date().timeIntervalSince1970)
+
         self.heartRates = []
         self.lastUpdateTime = Date().timeIntervalSince1970
     }
@@ -302,9 +326,9 @@ extension ViewController: EmpaticaDeviceDelegate {
     
     func didReceiveTemperature(_ temp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
-        let strDate = ts2date(timestamp: timestamp)
-        print("\(device.serialNumber!) \(strDate) TEMP { \(temp) }")
-        //        delegate?.updateFatigueLevel(self, fatigueLevel: Int(temp))
+//        let strDate = ts2date(timestamp: timestamp)
+//        print("\(device.serialNumber!) \(strDate) TEMP { \(temp) }")
+//        delegate?.updateFatigueLevel(self, fatigueLevel: Int(temp))
     }
     
     func didReceiveIBI(_ ibi: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
@@ -324,13 +348,13 @@ extension ViewController: EmpaticaDeviceDelegate {
         }
         
         // print
-//        let date = Date(timeIntervalSince1970: timestamp)
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
-//        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
-//        let strDate = dateFormatter.string(from: date)
-//        print("\(device.serialNumber!) \(strDate) IBI { \(ibi) }")
-        print("\(device.serialNumber!) \(timestamp) IBI { \(ibi) }")
+        let date = Date(timeIntervalSince1970: timestamp)
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
+        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
+        let strDate = dateFormatter.string(from: date)
+        print("\(device.serialNumber!) \(strDate) IBI { \(ibi) }")
+//        print("\(device.serialNumber!) \(timestamp) IBI { \(ibi) }")
 
     }
     
