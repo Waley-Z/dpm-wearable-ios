@@ -8,6 +8,16 @@
 
 import Foundation
 
+// convert timestamp to date string
+func ts2date(timestamp: Double) -> String {
+    let date = Date(timeIntervalSince1970: timestamp)
+    let dateFormatter = DateFormatter()
+    dateFormatter.timeZone = TimeZone(abbreviation: "EST")
+    dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
+    let strDate = dateFormatter.string(from: date)
+    return strDate
+}
+
 func trimStr(str: String) -> String {
     return str.trimmingCharacters(in: .whitespacesAndNewlines)
 }

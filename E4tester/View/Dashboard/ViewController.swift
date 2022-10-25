@@ -156,17 +156,6 @@ protocol ViewControllerDelegate: AnyObject {
 
 // utilities
 extension ViewController {
-    
-    // convert timestamp to date string
-    func ts2date(timestamp: Double) -> String {
-        let date = Date(timeIntervalSince1970: timestamp)
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
-        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
-        let strDate = dateFormatter.string(from: date)
-        return strDate
-    }
-    
     // POST
     func uploadHeartRate(heartRate: Int, timestamp: Double) {
         struct Request: Codable {
@@ -251,13 +240,24 @@ extension ViewController {
         return
     }
     
+    func getAverageHeartRate() -> Int {
+        if (heartRates.isEmpty) {
+            return 0
+        } else {
+            let sum = heartRates.reduce(0, +)
+            return sum / heartRates.count
+        }
+    }
+    
     func assessFatigue() {
-        
         print("\(Date().timeIntervalSince1970) start assessing \(self.heartRates.count) heart rate data")
+        self.lastUpdateTime = Date().timeIntervalSince1970
         
         // calculate HRR
-        let sum = self.heartRates.reduce(0, +)
-        let avgHR = sum / self.heartRates.count // average heartrate within one minute
+        let avgHR = getAverageHeartRate()
+        if (avgHR == 0) {
+            return
+        }
         let HRR = Int(Double(avgHR - self.rest_heart_rate) / Double(self.max_heart_rate - self.rest_heart_rate) * 100)
         print("avgHR = \(avgHR)")
         print("HRR = \(HRR)")
@@ -271,11 +271,10 @@ extension ViewController {
         print("fatigue updated")
         delegate?.updateFatigueLevel(self, fatigueLevel: fatigue)
         
-        // upload
+        // upload to server
         uploadFatigueLevel(fatigueLevel: fatigue, timestamp: Date().timeIntervalSince1970)
         
         self.heartRates = []
-        self.lastUpdateTime = Date().timeIntervalSince1970
     }
 }
 
@@ -334,28 +333,29 @@ extension ViewController: EmpaticaDeviceDelegate {
     func didReceiveIBI(_ ibi: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
         let heartRate = Int(60 / ibi)
-        self.heartRates.append(heartRate)
+        if (heartRate > max_heart_rate) {
+            return
+        }
         
-        // update UI
-        delegate?.updateHeartRate(self, heartRate: heartRate)
+        let avgHR = getAverageHeartRate()
         
-        // upload to server
-        uploadHeartRate(heartRate: heartRate, timestamp: timestamp)
+        if (avgHR == 0 || (avgHR != 0 && abs(heartRate - avgHR) < 30)) {
+            
+            heartRates.append(heartRate)
+            
+            // update UI
+            delegate?.updateHeartRate(self, heartRate: heartRate)
+            
+            // upload to server
+            uploadHeartRate(heartRate: heartRate, timestamp: timestamp)
+        }
         
         // check time interval
         if (timestamp - self.lastUpdateTime > 60) {
             assessFatigue()
         }
         
-        // print
-        let date = Date(timeIntervalSince1970: timestamp)
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "EST")
-        dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
-        let strDate = dateFormatter.string(from: date)
-        print("\(device.serialNumber!) \(strDate) IBI { \(ibi) }")
-        //        print("\(device.serialNumber!) \(timestamp) IBI { \(ibi) }")
-        
+        print("\(device.serialNumber!) \(ts2date(timestamp: timestamp)) IBI { \(ibi) }")
     }
     
     //    func didReceiveBVP(_ bvp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
