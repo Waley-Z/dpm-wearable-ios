@@ -1,4 +1,4 @@
-# E4 link Sample Project
+# Wearable-Based Fatigue Monitoring App
 
 ## Introduction
 
@@ -28,5 +28,14 @@ The sample application implemented in the project has very simple functionalitie
 
 If you need any additional information about the Empatica API for iOS, please check the [Official Documentation][2].
 
-[1]: https://www.empatica.com/connect/developer.php
-[2]: http://developer.empatica.com
+## Resources
+
+[E4 data - IBI expected signal](https://support.empatica.com/hc/en-us/articles/360030058011)
+
+> Studies with strong movement (more than 30% of the time): for these, you will probably not be able to get enough reliable IBI to compute heart rate variability continuously. However, you can still compute the average heart rate like consumer devices have done for over a decade. For example, you can use the motion information that our sensor gives, and when it is large, discard the IBI's with huge motion. Then take the average of the remaining IBI and check that they are in a reasonable range that has not changed too abruptly from the last estimate.
+
+[E4 data - BVP expected signal](https://support.empatica.com/hc/en-us/articles/360029719792-E4-data-BVP-expected-signal)
+
+[Utilizing the PPG/BVP signal](https://support.empatica.com/hc/en-us/articles/204954639-Utilizing-the-PPG-BVP-signal)
+
+> (eq 1.) GREEN, RED -->[ Algorithm 1]  --> PPG --> [Algorithm 2] --> IBI

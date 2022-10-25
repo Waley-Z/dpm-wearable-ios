@@ -166,7 +166,7 @@ extension ViewController {
         let strDate = dateFormatter.string(from: date)
         return strDate
     }
-
+    
     // POST
     func uploadHeartRate(heartRate: Int, timestamp: Double) {
         struct Request: Codable {
@@ -196,9 +196,9 @@ extension ViewController {
                 return
             }
             if let mimeType = response.mimeType,
-                mimeType == "application/json",
-                let data = data,
-                let dataString = String(data: data, encoding: .utf8) {
+               mimeType == "application/json",
+               let data = data,
+               let dataString = String(data: data, encoding: .utf8) {
                 
                 DispatchQueue.main.async {
                     print ("got data: \(dataString)")
@@ -238,9 +238,9 @@ extension ViewController {
                 return
             }
             if let mimeType = response.mimeType,
-                mimeType == "application/json",
-                let data = data,
-                let dataString = String(data: data, encoding: .utf8) {
+               mimeType == "application/json",
+               let data = data,
+               let dataString = String(data: data, encoding: .utf8) {
                 
                 DispatchQueue.main.async {
                     print ("got data: \(dataString)")
@@ -266,14 +266,14 @@ extension ViewController {
         self.awc_exp = max(self.awc_exp + self.k_value * (HRR - self.hrr_cp), 0)
         let fatigue = Int(Double(self.awc_exp) / Double(self.awc_tot) * 100)
         print("fatigue = \(fatigue)")
-
+        
         // update UI
         print("fatigue updated")
         delegate?.updateFatigueLevel(self, fatigueLevel: fatigue)
         
         // upload
         uploadFatigueLevel(fatigueLevel: fatigue, timestamp: Date().timeIntervalSince1970)
-
+        
         self.heartRates = []
         self.lastUpdateTime = Date().timeIntervalSince1970
     }
@@ -326,9 +326,9 @@ extension ViewController: EmpaticaDeviceDelegate {
     
     func didReceiveTemperature(_ temp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
         
-//        let strDate = ts2date(timestamp: timestamp)
-//        print("\(device.serialNumber!) \(strDate) TEMP { \(temp) }")
-//        delegate?.updateFatigueLevel(self, fatigueLevel: Int(temp))
+        //        let strDate = ts2date(timestamp: timestamp)
+        //        print("\(device.serialNumber!) \(strDate) TEMP { \(temp) }")
+        //        delegate?.updateFatigueLevel(self, fatigueLevel: Int(temp))
     }
     
     func didReceiveIBI(_ ibi: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
@@ -338,7 +338,7 @@ extension ViewController: EmpaticaDeviceDelegate {
         
         // update UI
         delegate?.updateHeartRate(self, heartRate: heartRate)
-
+        
         // upload to server
         uploadHeartRate(heartRate: heartRate, timestamp: timestamp)
         
@@ -354,8 +354,8 @@ extension ViewController: EmpaticaDeviceDelegate {
         dateFormatter.dateFormat = "HH:mm:ss" //Specify your format that you want
         let strDate = dateFormatter.string(from: date)
         print("\(device.serialNumber!) \(strDate) IBI { \(ibi) }")
-//        print("\(device.serialNumber!) \(timestamp) IBI { \(ibi) }")
-
+        //        print("\(device.serialNumber!) \(timestamp) IBI { \(ibi) }")
+        
     }
     
     //    func didReceiveBVP(_ bvp: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
@@ -398,6 +398,11 @@ extension ViewController: EmpaticaDeviceDelegate {
             break
             
         }
+    }
+    
+    func didReceiveBatteryLevel(_ level: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
+        var percentage = Int((level*100).rounded(.up))
+        self.updateValue(device: device, string: "\(percentage)%")
     }
 }
 

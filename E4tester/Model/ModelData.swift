@@ -156,7 +156,8 @@ public extension Published {
                 
                 if let decodedModel = try? JSONDecoder().decode(UpdateCrewResponseModel.self, from: data) {
                     print("success")
-                    for peer in decodedModel.peers where peer.user_id != self.user.user_id {
+                    for peer in decodedModel.peers {
+//                    for peer in decodedModel.peers where peer.user_id != self.user.user_id {
                                                 
                         DispatchQueue.main.async {
                             
@@ -175,7 +176,7 @@ public extension Published {
                                     observations: self.defaultObservations
                                 ))
                             }
-                            if (peer.fatigue_level > 70 && !ifLessThanNHours(timestamp: self.lastPeerNotification, hours: 4.0) && ifLessThanNHours(timestamp: Double(peer.last_update), hours: 0.3)){
+                            if ( peer.user_id != self.user.user_id && peer.fatigue_level > 70 && !ifLessThanNHours(timestamp: self.lastPeerNotification, hours: 4.0) && ifLessThanNHours(timestamp: Double(peer.last_update), hours: 0.3)){
                                 registerPeerNotification(first_name: peer.first_name)
                                 self.lastPeerNotification = Date().timeIntervalSince1970
                                 print("success: peer notification sent")
