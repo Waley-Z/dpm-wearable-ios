@@ -3,8 +3,9 @@
 This project is associated with [DPM](https://dpm.engin.umich.edu/) lab at UMich, particularly the research on [Wearable Biosensors-based Measurement of Workers’ Physical and Mental Status](https://dpm.engin.umich.edu/research/#:~:text=Wearable%20Biosensors%2Dbased%20Measurement%20of%20Workers%E2%80%99%20Physical%20and%20Mental%20Status). The research focuses on using wearable devices to help assess physical status of constructions workers. This repo builds the iOS app that communicates with  a [E4 wristband](https://www.empatica.com/en-int/research/e4/) to retrieve heart rate data, and connects with a [backend server](https://github.com/Waley-Z/dpm-wearable-backend) for managing user data.
 
 <p align="center">
-  <img src="README.assets/IMG_1905.png" width=30%/>
+  <img src="README.assets/IMG_1905.PNG" width=30%/>
 </p>
+
 
 ## Introduction
 
@@ -17,7 +18,7 @@ This app has the following features.
   * Group ID specifies the group which the user wants to retrieve co-worker information. Other data are intended for fatigue level calculation.
 
 <p align="center">
-	<img src="README.assets/IMG_2006.png" width=30%/>
+	<img src="README.assets/IMG_2006.PNG" width=30%/>
 </p>
 
 * Connects to/disconnects from E4 wristband, and retrieves inter-beat interval (IBI) and battery level.
