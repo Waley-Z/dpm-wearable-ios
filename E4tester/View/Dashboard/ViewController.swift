@@ -1,6 +1,7 @@
 //
 //  ViewController.swift
-//  E4 tester
+//  Originally provided by E4 sample code
+//  Handles E4 wristband delegate
 //
 
 import UIKit
@@ -51,6 +52,9 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.delegate = self
         self.tableView.dataSource = self
+//        self.tableView.backgroundColor = UIColor(named: "BackgroundColorGray")
+        self.tableView.isScrollEnabled = false
+
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
             EmpaticaAPI.authenticate(withAPIKey: Config.EMPATICA_API_KEY) { (status, message) in
                 if status {
@@ -401,11 +405,12 @@ extension ViewController: EmpaticaDeviceDelegate {
     }
     
     func didReceiveBatteryLevel(_ level: Float, withTimestamp timestamp: Double, fromDevice device: EmpaticaDeviceManager!) {
-        var percentage = Int((level*100).rounded(.up))
+        let percentage = Int((level * 100).rounded(.up))
         self.updateValue(device: device, string: "\(percentage)%")
     }
 }
 
+// handle touch selection
 extension ViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -467,6 +472,7 @@ class DeviceTableViewCell : UITableViewCell {
         
         self.device = device
         super.init(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "device")
+//        self.backgroundColor = UIColor(named: "BackgroundColorGray")
     }
     
     required init?(coder aDecoder: NSCoder) {

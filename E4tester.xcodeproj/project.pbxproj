@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,9 @@
 		55591B731F2884AC0084CF0C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55591B711F2884AC0084CF0C /* LaunchScreen.storyboard */; };
 		59CAB61E207770890052910F /* E4link.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CAB61D207770890052910F /* E4link.framework */; };
 		59CAB626207771C30052910F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CAB625207771C30052910F /* CoreBluetooth.framework */; };
+		B91491542911AFE400A51A62 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = B91491532911AFE400A51A62 /* Algorithms */; };
+		B914915C2911B19C00A51A62 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = B914915B2911B19C00A51A62 /* Charts */; };
+		B914915E2911C1FC00A51A62 /* MultiLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B914915D2911C1FC00A51A62 /* MultiLineChartView.swift */; };
 		B91AA790286CA26E00B36E84 /* ModelData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA78F286CA26E00B36E84 /* ModelData.swift */; };
 		B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA791286CA5B700B36E84 /* DashboardView.swift */; };
 		B91AA796286CA62400B36E84 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91AA795286CA62400B36E84 /* ProfileView.swift */; };
@@ -32,6 +35,7 @@
 		B9D051CA288B6CB900AAC9D8 /* GraphCapsule.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051C9288B6CB900AAC9D8 /* GraphCapsule.swift */; };
 		B9D051CE288B795B00AAC9D8 /* PeerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051CD288B795B00AAC9D8 /* PeerView.swift */; };
 		B9D051D128908DD100AAC9D8 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D051D028908DD100AAC9D8 /* Utilities.swift */; };
+		B9DADC0D290BA2BE00D5F9EB /* LineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DADC0C290BA2BE00D5F9EB /* LineChartView.swift */; };
 		B9EC1D8928C9234A007EB285 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9EC1D8828C9234A007EB285 /* Notification.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +62,7 @@
 		59CAB61D207770890052910F /* E4link.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = E4link.framework; path = Libs/E4link.framework; sourceTree = "<group>"; };
 		59CAB6222077716E0052910F /* E4tester-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "E4tester-Bridging-Header.h"; sourceTree = "<group>"; };
 		59CAB625207771C30052910F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		B914915D2911C1FC00A51A62 /* MultiLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiLineChartView.swift; sourceTree = "<group>"; };
 		B91AA78F286CA26E00B36E84 /* ModelData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelData.swift; sourceTree = "<group>"; };
 		B91AA791286CA5B700B36E84 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		B91AA795286CA62400B36E84 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -77,6 +82,7 @@
 		B9D051C9288B6CB900AAC9D8 /* GraphCapsule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphCapsule.swift; sourceTree = "<group>"; };
 		B9D051CD288B795B00AAC9D8 /* PeerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeerView.swift; sourceTree = "<group>"; };
 		B9D051D028908DD100AAC9D8 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		B9DADC0C290BA2BE00D5F9EB /* LineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineChartView.swift; sourceTree = "<group>"; };
 		B9EC1D8828C9234A007EB285 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +93,8 @@
 			files = (
 				59CAB626207771C30052910F /* CoreBluetooth.framework in Frameworks */,
 				59CAB61E207770890052910F /* E4link.framework in Frameworks */,
+				B91491542911AFE400A51A62 /* Algorithms in Frameworks */,
+				B914915C2911B19C00A51A62 /* Charts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,9 +201,11 @@
 			isa = PBXGroup;
 			children = (
 				B9D051BF288B27A300AAC9D8 /* CrewView.swift */,
+				B914915D2911C1FC00A51A62 /* MultiLineChartView.swift */,
 				B9D051CD288B795B00AAC9D8 /* PeerView.swift */,
 				B9D051C7288B6CB400AAC9D8 /* FatigueLevelGraph.swift */,
 				B9D051C9288B6CB900AAC9D8 /* GraphCapsule.swift */,
+				B9DADC0C290BA2BE00D5F9EB /* LineChartView.swift */,
 			);
 			path = MyCrew;
 			sourceTree = "<group>";
@@ -218,6 +228,8 @@
 			);
 			name = E4tester;
 			packageProductDependencies = (
+				B91491532911AFE400A51A62 /* Algorithms */,
+				B914915B2911B19C00A51A62 /* Charts */,
 			);
 			productName = E4Tests;
 			productReference = 55591B651F2884AC0084CF0C /* E4tester.app */;
@@ -256,6 +268,8 @@
 			);
 			mainGroup = 55591B5C1F2884AC0084CF0C;
 			packageReferences = (
+				B91491522911AFE400A51A62 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				B914915A2911B19C00A51A62 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = 55591B661F2884AC0084CF0C /* Products */;
 			projectDirPath = "";
@@ -287,6 +301,7 @@
 				B9D051BC288B21B500AAC9D8 /* Input.swift in Sources */,
 				B9D051BE288B21EA00AAC9D8 /* Peer.swift in Sources */,
 				B91AA796286CA62400B36E84 /* ProfileView.swift in Sources */,
+				B914915E2911C1FC00A51A62 /* MultiLineChartView.swift in Sources */,
 				B9D051C8288B6CB400AAC9D8 /* FatigueLevelGraph.swift in Sources */,
 				B9D051CE288B795B00AAC9D8 /* PeerView.swift in Sources */,
 				55591B6B1F2884AC0084CF0C /* ViewController.swift in Sources */,
@@ -297,6 +312,7 @@
 				B9D051BA288B11B400AAC9D8 /* User.swift in Sources */,
 				B91AA792286CA5B700B36E84 /* DashboardView.swift in Sources */,
 				B93AB80A285D8E6E0008DC59 /* DPMApp.swift in Sources */,
+				B9DADC0D290BA2BE00D5F9EB /* LineChartView.swift in Sources */,
 				B9D051B628887D2B00AAC9D8 /* FloatingLabelInput.swift in Sources */,
 				B9D051C0288B27A300AAC9D8 /* CrewView.swift in Sources */,
 				B9D051C2288B2D5F00AAC9D8 /* ResponseModel.swift in Sources */,
@@ -437,7 +453,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -464,7 +481,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				INFOPLIST_FILE = E4tester/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = Empatica1.E4tester;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -498,7 +518,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				INFOPLIST_FILE = E4tester/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = Empatica1.E4tester;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -532,6 +555,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B91491522911AFE400A51A62 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		B914915A2911B19C00A51A62 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = exactVersion;
+				version = 4.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B91491532911AFE400A51A62 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B91491522911AFE400A51A62 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
+		};
+		B914915B2911B19C00A51A62 /* Charts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B914915A2911B19C00A51A62 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = Charts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 55591B5D1F2884AC0084CF0C /* Project object */;
 }

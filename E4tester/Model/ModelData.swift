@@ -11,6 +11,7 @@ import Combine
 
 fileprivate var cancellables = [String : AnyCancellable] ()
 
+// store user data in UserDefaults as (key, value) so that no repeated login
 public extension Published {
     init(wrappedValue defaultValue: Value, key: String) {
         let value = UserDefaults.standard.object(forKey: key) as? Value ?? defaultValue
@@ -21,7 +22,7 @@ public extension Published {
     }
 }
 
-@MainActor class ModelData: ObservableObject {
+class ModelData: ObservableObject {
     @Published var heartRate: Int = 0
     @Published(key: "fatigueLevel") var fatigueLevel: Int = 0
     
@@ -31,64 +32,20 @@ public extension Published {
     
     @Published(key: "lastPeerNotification") var lastPeerNotification: Double = 0
     @Published(key: "lastResetDay") var lastResetDay: Int = 0
-
-    var defaultObservations: [Peer.Observation] = []
-    
-    //    @Published var loggedIn: Bool = true
-    //    @Published var nameEntered: Bool = true
-    //    @Published var userCreated: Bool = true
     
     @Published var user: User = User()
     @Published var inputs: Inputs = Inputs()
     @Published var crew: [Peer] = []
     
+    var defaultObservations: [Peer.Observation] = []
+    
     init() {
         for i in 0...11 {
-            defaultObservations.append(Peer.Observation(hour_from_midnight: i, fatigue_level_range: -1 ..< -1))
+            defaultObservations.append(Peer.Observation(hour_from_midnight: i, fatigue_level_range: -1 ..< -1, avg_fatigue_level: -1))
         }
     }
     
-    static func load(completion: @escaping (Result<User, Error>)->Void) {
-        DispatchQueue.main.async {
-            do {
-                let fileURL = try fileURL()
-                guard let file = try? FileHandle(forReadingFrom: fileURL) else {
-                    DispatchQueue.main.async {
-                        completion(.success(User()))
-                    }
-                    return
-                }
-                let user = try JSONDecoder().decode(User.self, from: file.availableData)
-                DispatchQueue.main.async {
-                    completion(.success(user))
-                    print("User information retrieved")
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
-    
-    static func save(user: User, completion: @escaping (Result<Bool, Error>)->Void) {
-        DispatchQueue.global(qos: .background).async {
-            do {
-                let data = try JSONEncoder().encode(user)
-                let outfile = try fileURL()
-                try data.write(to: outfile)
-                DispatchQueue.main.async {
-                    completion(.success(true))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-            }
-        }
-    }
-    
-    // TODO?
+    // GET fatigue data of a peer, called from updateCrew()
     func updatePeer(user_id: Int) async {
         let url = URL(string: Config.API_SERVER + "/api/v1/peer/" + String(user_id) + "/")!
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -103,13 +60,15 @@ public extension Published {
             }
             if let mimeType = response.mimeType, mimeType == "application/json",
                let data = data,
-               let dataString = String(data: data, encoding: .utf8) {
-//                print ("got data: \(dataString)")
+               let dataString = String(data: data, encoding: .utf8)
+            {
+                 print ("got data: \(dataString)")
                 
                 if let observationModel = try? JSONDecoder().decode(PeerFatigueResponseModel.self, from: data) {
                     print("success decode observation")
                     
-                    let hourRange: Range = 6..<18
+                    // filter data from 7am to 3pm, note the offset
+                    let hourRange: ClosedRange = 6...14
                     let observations: [Peer.Observation] = observationModel.observations.filter { hourRange.contains($0.hour_from_midnight)}
                     
                     
@@ -121,19 +80,17 @@ public extension Published {
                     DispatchQueue.main.async {
                         self.crew[peerIndex].observations = observations
                     }
-
+                    
                 } else {
                     print("decode error")
                 }
-                
             }
         }
         task.resume()
         return
     }
     
-
-    // GET crew
+    // GET crew information, triggered by DashboardView
     func updateCrew() async {
         if (self.user.group_id == "") {
             return
@@ -156,16 +113,17 @@ public extension Published {
                 
                 if let decodedModel = try? JSONDecoder().decode(UpdateCrewResponseModel.self, from: data) {
                     print("success")
+
+                    // loop through each peer
                     for peer in decodedModel.peers {
-//                    for peer in decodedModel.peers where peer.user_id != self.user.user_id {
-                                                
+                        // for peer in decodedModel.peers where peer.user_id != self.user.user_id {
+                        
                         DispatchQueue.main.async {
                             
                             if let i = self.crew.firstIndex(where: {$0.id == peer.user_id}) {
                                 self.crew[i].first_name = peer.first_name
                                 self.crew[i].fatigue_level = peer.fatigue_level
                                 self.crew[i].last_update = peer.last_update
-                                
                             } else {
                                 // item could not be found
                                 self.crew.append(Peer(
@@ -176,14 +134,16 @@ public extension Published {
                                     observations: self.defaultObservations
                                 ))
                             }
-                            if ( peer.user_id != self.user.user_id && peer.fatigue_level > 70 && !ifLessThanNHours(timestamp: self.lastPeerNotification, hours: 4.0) && ifLessThanNHours(timestamp: Double(peer.last_update), hours: 0.3)){
+                            
+                            // send peer notification on condition
+                            if (peer.user_id != self.user.user_id && peer.fatigue_level > 70 && !ifLessThanNHours(timestamp: self.lastPeerNotification, hours: 4.0) && ifLessThanNHours(timestamp: Double(peer.last_update), hours: 0.3)) {
                                 registerPeerNotification(first_name: peer.first_name)
                                 self.lastPeerNotification = Date().timeIntervalSince1970
                                 print("success: peer notification sent")
                             }
                         }
                         
-                        Task{
+                        Task {
                             await self.updatePeer(user_id: peer.user_id)
                         }
                         
@@ -201,7 +161,7 @@ public extension Published {
         return
     }
     
-    // POST query
+    // POST query first and last names for user information
     func queryName() async {
         struct Request: Codable {
             let first_name: String
@@ -290,7 +250,7 @@ public extension Published {
         return
     }
     
-    // POST upload user info
+    // POST upload user information
     func uploadUserInfo() async {
         struct Request: Codable {
             let first_name: String
@@ -355,7 +315,6 @@ public extension Published {
                mimeType == "application/json",
                let data = data,
                let dataString = String(data: data, encoding: .utf8) {
-                
                 print ("got data: \(dataString)")
                 do {
                     // make sure this JSON is in the format we expect
@@ -376,15 +335,14 @@ public extension Published {
                 } catch let error as NSError {
                     print("Failed to load: \(error.localizedDescription)")
                 }
-                
             }
-            
         }
         task.resume()
         return
     }
     
-    func uploadActivity(peer_id: Int, if_open:Bool) async {
+    // POST upload activities of folding/unfolding peers' fatigue details
+    func uploadActivity(peer_id: Int, if_open: Bool) async {
         struct Request: Codable {
             let user_id: Int
             let peer_id: Int
@@ -423,30 +381,52 @@ public extension Published {
                let dataString = String(data: data, encoding: .utf8) {
                 
                 print ("got data: \(dataString)")
-//                do {
-//                    // make sure this JSON is in the format we expect
-//                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-//                        // try to read out a string array
-//                        if let user_id = json["user_id"] as? Int,
-//                           let max_heart_rate = json["max_heart_rate"] as? Int {
-//                            DispatchQueue.main.async {
-//                                self.user.user_id = user_id
-//                                self.user.max_heart_rate = max_heart_rate
-//
-//                                print("success")
-//                                self.userCreated = true
-//                                self.loggedIn = true
-//                            }
-//                        }
-//                    }
-//                } catch let error as NSError {
-//                    print("Failed to load: \(error.localizedDescription)")
-//                }
-                
             }
-            
         }
         task.resume()
         return
+    }
+}
+
+// save and load User data when starting/quiting the app
+extension ModelData {
+    static func load(completion: @escaping (Result<User, Error>)->Void) {
+        DispatchQueue.main.async {
+            do {
+                let fileURL = try fileURL()
+                guard let file = try? FileHandle(forReadingFrom: fileURL) else {
+                    DispatchQueue.main.async {
+                        completion(.success(User()))
+                    }
+                    return
+                }
+                let user = try JSONDecoder().decode(User.self, from: file.availableData)
+                DispatchQueue.main.async {
+                    completion(.success(user))
+                    print("User information retrieved")
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
+    static func save(user: User, completion: @escaping (Result<Bool, Error>)->Void) {
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let data = try JSONEncoder().encode(user)
+                let outfile = try fileURL()
+                try data.write(to: outfile)
+                DispatchQueue.main.async {
+                    completion(.success(true))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }
     }
 }

@@ -11,17 +11,22 @@ import SwiftUI
 struct DashboardView: View {
     @EnvironmentObject var modelData: ModelData
     
+    // timer for periodic crew info retrieval
     let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
-
+    
     var body: some View {
-        
         ScrollView{
             VStack(alignment: .leading){
                 if (modelData.user.user_id != -1) {
                     SwiftUIViewController()
-                        .frame(height: 50)
-                        .padding()
+                        .frame(height: 40)
+                        .padding(EdgeInsets(top: 5, leading: 10, bottom: 0 , trailing: 10))
+                    //                        .border(.green)
                 }
+                
+                Text("Daily Summary")
+                    .font(.system(size: 20, weight: .bold))
+                    .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                 
                 HStack{
                     Image(systemName: "hand.wave.fill")
@@ -32,6 +37,8 @@ struct DashboardView: View {
                 
                 InfoView()
                     .frame(height: 200)
+                    .background(Color.white)
+                    .cornerRadius(15)
                     .padding([.horizontal], 20)
                 
                 HStack{
@@ -44,7 +51,7 @@ struct DashboardView: View {
                 CrewView()
                     .padding([.horizontal], 20)
                 //                CollapsibleView()
-//                    .onReceive(Timer.publish(every: 5, tolerance: 5, on: .main, in: .default)) { (_) in
+                //                    .onReceive(Timer.publish(every: 5, tolerance: 5, on: .main, in: .default)) { (_) in
                     .onReceive(timer) { _ in
                         print("update crew")
                         Task {
@@ -59,10 +66,11 @@ struct DashboardView: View {
                     }
             }
         }
+//        .background(Color("BackgroundColorGray").ignoresSafeArea())
     }
 }
 
-
+// implemented to interface with UIKit
 struct SwiftUIViewController: UIViewControllerRepresentable {
     @EnvironmentObject var modelData: ModelData
     
@@ -81,9 +89,7 @@ struct SwiftUIViewController: UIViewControllerRepresentable {
                                             hrr_cp: modelData.user.hrr_cp,
                                             awc_tot: modelData.user.awc_tot,
                                             k_value: modelData.user.k_value
-                                            
         )
-        //        viewController.delegate = context.coordinator
         return viewController
     }
     

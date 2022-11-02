@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Peer : Identifiable {
+struct Peer : Identifiable, Hashable {
     var id: Int // user_id
     
     var first_name: String = ""
@@ -19,5 +19,6 @@ struct Peer : Identifiable {
     struct Observation: Codable, Hashable {
         var hour_from_midnight: Int
         var fatigue_level_range: Range<Int>
+        var avg_fatigue_level: Double
     }
 }
